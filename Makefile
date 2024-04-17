@@ -1,29 +1,38 @@
 NAME = so_long
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -g -L./mlx -lmlx -framework AppKit -framework OpenGL 
-SRCS =  main.c getnextline/get_next_line.c getnextline/get_next_line_utils.c moves.c name.check.c mapprint.c mapcheck.c floodfill.c utils.c utils2.c
+FLAGS = -Wall -Wextra -Werror
+FREAMS = -framework OpenGL -framework AppKit
 
-OBJS= $(SRCS:.c=.o)
-MINI = ./mlx/libmlx.a
+MLX = ./mlx/libmlx.a
+PRINTF = ./ft_printf/libftprintf.a
+GNL = ./gnl/gnl.a
 
-all: ${NAME}
+all: $(NAME)
 
-$(MINI):
-	make -C ./mlx &> /dev/null
+$(NAME): *.o $(MLX) $(LIBFT) $(GNL) $(PRINTF)
+	$(CC) $(FLAGS) -o $(NAME) *.o $(MLX) $(GNL) $(PRINTF) $(FREAMS)
 
-$(NAME): $(MINI) $(OBJS) 
-	$(CC) ${CFLAGS} $(OBJS) -o $(NAME) 
+*.o: *.c
+	$(CC) $(FLAGS) -c *.c
 
-%.o: %.c
-	${CC} -c $^ -o $@ -Wall -Werror -Wextra -g
+$(MLX):
+	@make -C ./mlx
+
+$(PRINTF):
+	@make -C ./ft_printf
+
+$(GNL):
+	@make -C ./gnl
 
 clean:
-	rm -rf ${OBJS}
-	make clean -C mlx/
+	rm -f *.o
+	@make clean -C ./ft_printf
+	@make clean -C ./mlx
+	@make clean -C ./gnl
 
 fclean: clean
-	rm -rf ${NAME}
-	make clean -C mlx/
+	rm -f so_long
+	@make fclean -C ./ft_printf
+	@make fclean -C ./gnl
 
-re: fclean all
-.PHONY: fclean re all clean
+re:fclean all

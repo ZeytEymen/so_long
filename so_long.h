@@ -6,7 +6,7 @@
 /*   By: ekarabud <ekarabud@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 16:54:51 by olyetisk          #+#    #+#             */
-/*   Updated: 2024/04/16 20:13:40 by ekarabud         ###   ########.fr       */
+/*   Updated: 2024/04/17 22:55:03 by ekarabud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,51 +17,48 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include "mlx/mlx.h"
-# include "getnextline/get_next_line.h"
-# include "printf/ft_printf.h"
+# include "gnl/get_next_line.h"
+# include "ft_printf/ft_printf.h"
 
 typedef struct s_mlx
 {
-	void	*mlx_win;
-	void	*mlx;
-	char	**map;
-	void	*wall;
-	void	*grass;
-	void	*bird;
-	void	*nest;
-	void	*exit;
-	void	*worm;
-	int		i;
-	int		j;
-	char	**copy_map;
-	int		playerx;
-	int		playery;
-	int		mapx;
-	char	**maps;
-	int		axe_count;
+	//textures/images
+	void	*wall;			//	1
+	void	*grass;			//	0
+	void	*player;		//	P
+	void	*exit;			//	E
+	void	*collectible;	//	C
+	//map
+	char	**map_line;
+	//locations
+	int		player_x_loc;
+	int		player_y_loc;
+	int		exit_x_loc;
+	int		exit_y_loc;
+	//counts
 	int		exit_count;
 	int		player_count;
-	int		move;
-	int		mapy;
-	char	*map_path;
+	int		collectible_count;
+	int		player_move_count;
+	int		map_line_count;
+	//mlx
+	void	*mlx_init;
+	void	*mlx_window;
+	
 }			t_mlx;
-/*
-int		get_key(int keycode, t_mlx *solong);
-void	take_image_xpm(t_mlx *map);
-void	name_ber(char *str);
-void	free_map(char **map, char *msg);
-void	imagetowin(t_mlx *solong, int x, int y);
-char	**getmap(char *av);
-int		map_len(char *av);
-void	error1(char *str);
-void	move_write(char *str);
-int		wall(t_mlx *solong);
-void	move_write2(char *str);
-void	paste_to_image(t_mlx *solong);
-void	ft_putnbr(unsigned int a);
-void	ft_counter(t_mlx *solong);
-int		floodfill(t_mlx *solong);
-int		floodfill1(t_mlx *solong);
-void	checkmap_chars(char **str);
-*/
+//	utils
+void    exception(char *str);
+size_t	ft_strlen(const char *s);
+//	checks
+void	check_file_name(char *str);
+void    check_arg_count(int count);
+// map
+int		map_line_count(char *file_name);
+char	**create_map(char *file_name, int line_length);
+void    take_images(t_mlx *map);
+void	put_images(t_mlx *map, void *image, int x, int y);
+void    load_images_to_window(t_mlx *map);
+
+int get_key(int keycode, t_mlx *solong);
+int abort_game(t_mlx *game);
 #endif
