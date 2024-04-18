@@ -6,7 +6,7 @@
 /*   By: ekarabud <ekarabud@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 16:54:51 by olyetisk          #+#    #+#             */
-/*   Updated: 2024/04/18 14:06:17 by ekarabud         ###   ########.fr       */
+/*   Updated: 2024/04/18 19:31:36 by ekarabud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ typedef struct s_mlx
 	void	*collectible;	//	C
 	//map
 	char	**map_line;
+	int 	is_map_allocated;
 	//locations
 	int		player_x_loc;
 	int		player_y_loc;
@@ -54,6 +55,7 @@ size_t	ft_strlen(const char *s);
 void	check_file_name(t_mlx *map, char *str);
 void    check_arg_count(t_mlx *map, int count);
 void 	take_image_count(t_mlx *map, int x, int y);
+void	image_count_control(t_mlx *map);
 // map
 int		map_line_count(t_mlx *map,char *file_name);
 char	**create_map(t_mlx *map,char *file_name, int line_length);
@@ -63,4 +65,7 @@ void    load_images_to_window(t_mlx *map);
 
 int get_key(int keycode,t_mlx *map);
 int abort_game(t_mlx *game);
+void _test(int number);
+void 	rectangle_control(t_mlx *map);
+void wall_control(t_mlx *map);
 #endif
