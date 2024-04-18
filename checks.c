@@ -6,26 +6,61 @@
 /*   By: ekarabud <ekarabud@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 13:25:36 by ekarabud          #+#    #+#             */
-/*   Updated: 2024/04/17 13:46:51 by ekarabud         ###   ########.fr       */
+/*   Updated: 2024/04/18 13:53:40 by ekarabud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-void	check_file_name(char *str)
+void	check_file_name(t_mlx *map, char *str)
 {
 	int	i;
 
 	i = ft_strlen(str) - 1;
 	if (i <= 3)
-		exception ("There is no file");
+		exception (map, "There is no file");
 	if (str[i] != 'r' || str[i - 1] != 'e' || str[i - 2] != 'b'
 		|| str[i - 3] != '.')
-		exception ("File extension is incorrect Are you sure the extension is .ber");
+		exception (map, "File extension is incorrect Are you sure the extension is .ber");
 }
 
-void    check_arg_count(int count)
+void    check_arg_count(t_mlx *map, int count)
 {
     if(count != 2)
-		exception("Number of arguments is incorrect, only 2 arguments are accepted");
+		exception(map, "Number of arguments is incorrect, only 2 arguments are accepted");
+}
+
+void take_image_count(t_mlx *map, int x, int y)
+{
+	map -> player_count = 0;	
+	map -> collectible_count = 0;	
+	map -> exit_count = 0;
+	y = -1;
+	while (map -> map_line[++y])
+	{
+		x = -1;
+		while (map -> map_line[y][++x])
+		{
+			if (map -> map_line[y][x] == 'P')
+			{
+				map -> player_x_loc = x;
+				map -> player_y_loc = y;
+				map -> player_count++;
+			}
+			else if(map -> map_line[y][x] == 'C')
+				map -> collectible_count++;
+			else if(map -> map_line[y][x] == 'E')
+				map -> exit_count++;;
+		}
+	}
+}
+void image_count_control(t_mlx *map)
+{
+	take_image_count(map, 0, 0);
+	if (map -> player_count != 1)
+		exception_with_number(map, "Error in 'P' character count\nExcepted : 1\nResult :",map -> player_count);
+	if (map -> collectible_count == 0)
+		exception_with_number(map, "Error in 'C' character count\nExcepted : count > 0\nResult :",map -> collectible_count);
+	if (map -> exit_count != 1)
+		exception_with_number(map, "Error in 'E' character count\nExcepted : 1\nResult :",map -> exit_count);
 }

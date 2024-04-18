@@ -6,14 +6,13 @@
 /*   By: ekarabud <ekarabud@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 15:32:30 by ekarabud          #+#    #+#             */
-/*   Updated: 2024/04/17 23:06:42 by ekarabud         ###   ########.fr       */
+/*   Updated: 2024/04/18 13:40:42 by ekarabud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-
-int	map_line_count(char *file_name)
+int	map_line_count(t_mlx *map,char *file_name)
 {
 	int		len;
 	int		fd;
@@ -21,7 +20,7 @@ int	map_line_count(char *file_name)
 
 	fd = open(file_name, O_RDONLY);
 	if (fd == -1)
-		exception("Cannot open map map_read");
+		exception(map,"Cannot open map");
 	len = 0;
 	while (1)
 	{
@@ -32,36 +31,37 @@ int	map_line_count(char *file_name)
 		len++;
 	}
 	if (len <= 0)
-		exception("There is no line was found !!");
+	{
+		if (line)
+			free(line);
+		exception(map,"There is no line was found !!");		
+	}
 	close(fd);
 	return (len);
 }
-char	**create_map(char *file_name, int line_length)
+char	**create_map(t_mlx *map, char *file_name, int line_length)
 {
 	int 	len;
 	int 	i;
 	int		fd;
-	char	**map;
+	char	**map_line;
 	
 	len = line_length;
-	map = (char **)malloc(sizeof(char *) * (len + 1));
-	if(!map)
+	map_line = (char **)malloc(sizeof(char *) * (len + 1));
+	if(!map_line)
 		exit(EXIT_FAILURE);
 	fd = open(file_name, O_RDONLY);
 	if (fd == -1)
 	{
-		free(map);
-		exception("Cannot open map create_map");
+		free(map_line);
+		exception(map, "Cannot open map");
 	}
 	i = 0;
 	while (i < len)
-	{
-		write(1,"test\n",5);
-		map[i++] = get_next_line(fd);
-	}
-	map[i] = NULL;
+		map_line[i++] = get_next_line(fd);
+	map_line[i] = NULL;
 	close(fd);
-	return (map);
+	return (map_line);
 }
 
 void    take_images(t_mlx *map)
@@ -75,7 +75,7 @@ void    take_images(t_mlx *map)
     map -> grass = mlx_xpm_file_to_image(map -> mlx_init, "textures/grass.xpm", &w, &h);
     map -> exit = mlx_xpm_file_to_image(map -> mlx_init, "textures/nest.xpm", &w, &h);
     if ((!map -> player) || (!map -> wall) || (!map -> collectible) || (!map -> grass) || (!map -> exit))
-        exception("Textures could not found !! take_images");
+        exception(map,"Textures could not found !!");
 }
 
 void	put_images(t_mlx *map, void *image, int x, int y)
