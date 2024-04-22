@@ -6,13 +6,12 @@
 /*   By: ekarabud <ekarabud@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 13:25:36 by ekarabud          #+#    #+#             */
-/*   Updated: 2024/04/18 20:09:53 by ekarabud         ###   ########.fr       */
+/*   Updated: 2024/04/22 19:44:44 by ekarabud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-// .ber control
 void	check_file_name(t_mlx *map, char *str)
 {
 	int	i;
@@ -24,7 +23,7 @@ void	check_file_name(t_mlx *map, char *str)
 		|| str[i - 3] != '.')
 		exception (map, "File extension is incorrect Are you sure the extension is .ber");
 }
-// argument count control
+
 void    check_arg_count(t_mlx *map, int count)
 {
     if(count != 2)
@@ -43,11 +42,7 @@ void take_image_count(t_mlx *map, int x, int y)
 		while (map -> map_line[y][++x])
 		{
 			if (map -> map_line[y][x] == 'P')
-			{
-				map -> player_x_loc = x;
-				map -> player_y_loc = y;
 				map -> player_count++;
-			}
 			else if(map -> map_line[y][x] == 'C')
 				map -> collectible_count++;
 			else if(map -> map_line[y][x] == 'E')
@@ -59,11 +54,11 @@ void image_count_control(t_mlx *map)
 {
 	take_image_count(map, 0, 0);
 	if (map -> player_count != 1)
-		exception_with_number(map, "Error in 'P' character count\nExcepted : 1\nResult :",map -> player_count);
+		exception_with_number(map, "Error in 'P' character count\nExcepted : 1\nResult : ",map -> player_count);
 	if (map -> collectible_count == 0)
-		exception_with_number(map, "Error in 'C' character count\nExcepted : count > 0\nResult :",map -> collectible_count);
+		exception_with_number(map, "Error in 'C' character count\nExcepted : count > 0\nResult : ",map -> collectible_count);
 	if (map -> exit_count != 1)
-		exception_with_number(map, "Error in 'E' character count\nExcepted : 1\nResult :",map -> exit_count);
+		exception_with_number(map, "Error in 'E' character count\nExcepted : 1\nResult : ",map -> exit_count);
 }
 
 void rectangle_control(t_mlx *map)
@@ -72,24 +67,29 @@ void rectangle_control(t_mlx *map)
 	int i;
 	
 	i = 0;
-	line_length = ft_strlen(map -> map_line[0]);
-	//ft_printf("%d",map -> map_line_count);
-	// while (i < map -> map_line_count)
-	// {
-	// 	if (line_length != (int)ft_strlen(map -> map_line[i]))
-	// 		exception(map, "The line lengths of the map are not equal !!");
-	// 	i++;
-	// }
+	line_length = (int)ft_strlen(map -> map_line[0]);
+	while (i <= map -> map_line_count - 1 && map -> map_line[i])
+	{
+		if(i == (map -> map_line_count - 1) && line_length != ((int)ft_strlen(map -> map_line[i]) - 1))
+			line_length--;
+		if (line_length != (int)ft_strlen(map -> map_line[i]))
+			exception(map, "Line lengths must be the same length and there must be no blank lines");
+		i++;
+	}
 }
 
 void wall_control(t_mlx *map)
 {
-	(void)map;
-	//int line = map -> map_line_count - 1;
-	// if (ft_strchr(map -> map_line[0],'1'))
-	// {
-	// 	_test(1);
-	// }
-	// else
-	// 	_test(2);
+	int length;
+	int i;
+	
+	i = 0;
+	length = (int)ft_strlen(map -> map_line[1]) - 2;
+	if (line_char_control(map -> map_line[0]) || line_char_control(map -> map_line[map -> map_line_count - 1]))
+		exception(map,"Wall Error !!");
+	while (++i <= map -> map_line_count - 2)
+	{
+		if (map -> map_line[i][0] != '1' || map -> map_line[i][length] != '1')
+			exception(map,"Middle Wall Error");
+	}
 }
