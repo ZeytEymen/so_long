@@ -6,7 +6,7 @@
 /*   By: ekarabud <ekarabud@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 22:09:00 by ekarabud          #+#    #+#             */
-/*   Updated: 2024/04/22 19:03:48 by ekarabud         ###   ########.fr       */
+/*   Updated: 2024/04/22 22:06:07 by ekarabud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,10 @@ void	map_move(t_mlx *map, int x, int y)
 	{
 		ft_printf("Step Count: %d\n", ++map->player_move_count);
 		if (map->map_line[y][x] == 'C')
+		{
+			ft_printf("You found the bait\n");
 			map->collectible_count--;
+		}
 		map->map_line[map->player_y_loc][map->player_x_loc] = '0';
 		map->map_line[y][x] = 'P';
 		map->player_y_loc = y;
@@ -30,9 +33,10 @@ void	map_move(t_mlx *map, int x, int y)
 		abort_game(map);
 	}
 }
-int get_key(int keycode, t_mlx *map)
+
+int	get_key(int keycode, t_mlx *map)
 {
-  int		x;
+	int		x;
 	int		y;
 	char	*move;
 

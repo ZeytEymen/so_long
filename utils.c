@@ -6,37 +6,38 @@
 /*   By: ekarabud <ekarabud@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 12:56:57 by ekarabud          #+#    #+#             */
-/*   Updated: 2024/04/22 19:05:26 by ekarabud         ###   ########.fr       */
+/*   Updated: 2024/04/22 20:39:35 by ekarabud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
-void    exception(t_mlx *map, char *str)
+
+void	exception(t_mlx *map, char *str)
 {
-    ft_printf("%s\n",str);
-    abort_game(map);
+	ft_printf("%s\n", str);
+	abort_game(map);
 }
 
-void    exception_with_number(t_mlx *map, char *str, int count)
+void	exception_with_number(t_mlx *map, char *str, int count)
 {
-    ft_printf("%s%d\n",str,count);
-    abort_game(map);
+	ft_printf("%s%d\n", str, count);
+	abort_game(map);
 }
 
-int line_char_control(char *line)
+int	line_char_control(char *line)
 {
-    int i;
+	int	i;
 
-    i = -1;
-    while (line[++i])
-    {
-        if (line[i] != '\n')
-        {
-            if (line[i] != '1')
-                return (1);
-        }
-    }
-    return(0);
+	i = -1;
+	while (line[++i])
+	{
+		if (line[i] != '\n')
+		{
+			if (line[i] != '1')
+				return (1);
+		}
+	}
+	return (0);
 }
 
 int	ft_nbr(int n)
